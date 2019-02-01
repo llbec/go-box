@@ -1,22 +1,50 @@
 package order
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
 )
 
-//Order a struct
-type Order struct {
-	name   string
-	useage string
+const (
+	typeInt = iota
+	typeInt64
+	typeBool
+	typeString
+)
+
+//Command a struct
+type Command struct {
+	Name   string
+	Usage  string
 	flags  []flag
+	args   []string
+	Action func(args []string) error
+	parent *Command
+	childs []*Command
 }
 
 type flag struct {
-	name   string
-	useage string
-	value  interface{}
+	name  string
+	usage string
+	alias string
+	stamp int
+	value interface{}
+}
+
+//Execute execute the command object
+func (cmd *Command) Execute() error {
+	if cmd.parent == nil {
+		cmd.args = os.Args
+	} else {
+		cmd.args = cmd.parent.args[1:]
+	}
+	return nil
+}
+
+func (cmd *Command) help() {
+	fmt.Println(cmd.Usage)
 }
 
 //Entrys a command's args and flags for application
