@@ -1,10 +1,23 @@
-package command
+package order
 
 import (
 	"os"
 	"strconv"
 	"strings"
 )
+
+//Order a struct
+type Order struct {
+	name   string
+	useage string
+	flags  []flag
+}
+
+type flag struct {
+	name   string
+	useage string
+	value  interface{}
+}
 
 //Entrys a command's args and flags for application
 type Entrys struct {
